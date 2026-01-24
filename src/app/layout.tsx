@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "DigitaLab TN | IPTV, Netflix & Spotify Tunisie",
   description: "Achetez vos abonnements IPTV, Netflix, Spotify et cartes cadeaux en Tunisie. Livraison immédiate, support 24/7 et meilleurs prix chez DigitaLab TN.",
   keywords: ["iptv Tunisie","IPTV Tunisie", "Netflix Tunisie", "Spotify Tunisie", "Abonnement IPTV", "Gaming Tunisie", "DigitaLab TN"],
+  verification: {
+    google: "uPGhsckn3tT9mHbLucIbm1gagir8X0H5C92NJLqZqwM",
+  },
 };
 
 import { getCategories } from "@/lib/db";
