@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "FAQ | DigitaLab",
+  title: "FAQ | DigitalFun",
   description: "Frequently asked questions about our services.",
 };
 

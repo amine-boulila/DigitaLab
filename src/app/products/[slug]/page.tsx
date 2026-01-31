@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   }
   
   return {
-    title: `${product.name} | DigitaLab`,
+    title: `${product.name} | DigitalFun`,
     description: product.short_description,
   };
 }

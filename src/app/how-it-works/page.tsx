@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { Search, MessageCircle, CreditCard, Gift } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "How It Works | DigitaLab",
+  title: "How It Works | DigitalFun",
   description: "Learn how to purchase and use our digital products.",
 };
 

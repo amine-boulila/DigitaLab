@@ -8,8 +8,8 @@ interface FeatureCardProps {
 
 export function FeatureCard({ icon: Icon, title, description }: FeatureCardProps) {
   return (
-    <div className="rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all hover:bg-white/10">
-      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-400">
+    <div className="glass group rounded-2xl p-6 transition-all hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/20">
+      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 text-cyan-400 transition-all group-hover:from-cyan-500/30 group-hover:to-purple-500/30 group-hover:text-cyan-300">
         <Icon className="h-6 w-6" />
       </div>
       <h3 className="mb-2 text-lg font-bold text-white">{title}</h3>

@@ -6,7 +6,7 @@ import Link from "next/link"; // Ensure Link is imported if used (not strictly u
 import { ContactButton } from "./ContactButtons";
 
 export const metadata: Metadata = {
-  title: "Contact Us | DigitaLab",
+  title: "Contact Us | DigitalFun",
   description: "Get in touch with us related to sales or support.",
 };
 
@@ -22,10 +22,10 @@ export default function ContactPage() {
         <div className="grid gap-6 sm:grid-cols-2">
             <ContactButton />
             
-            <a href="mailto:support@DigitaLab.com" className="flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 p-8 transition-all hover:bg-white/10">
+            <a href="mailto:support@DigitalFun.com" className="flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 p-8 transition-all hover:bg-white/10">
               <Mail className="mb-4 h-10 w-10 text-indigo-400" />
               <h3 className="mb-2 text-xl font-bold text-white">Email Us</h3>
-              <p className="text-sm text-gray-400">support@DigitaLab.com</p>
+              <p className="text-sm text-gray-400">support@DigitalFun.com</p>
             </a>
         </div>
       </div>
