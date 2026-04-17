@@ -1,6 +1,10 @@
 import { getProductsByCategory, getCategories } from "@/lib/db";
 import { ProductCard } from "@/components/ProductCard";
+import { EmptyState } from "@/components/ui/empty-state";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { Box } from "lucide-react";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 interface CategoryPageProps {
   params: Promise<{
@@ -29,21 +33,37 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const products = await getProductsByCategory(slug);
 
   return (
-    <div className="container mx-auto min-h-screen px-4 py-12">
-      <header className="mb-12">
-        <h1 className="mb-4 text-4xl font-bold text-white md:text-5xl">{category.name}</h1>
-        <p className="max-w-2xl text-lg text-gray-400">{category.description}</p>
-      </header>
-      
+    <div className="page-section min-h-screen">
+      <div className="mb-4 flex items-center gap-2 text-sm text-slate-500">
+        <Link className="transition hover:text-slate-950" href="/">
+          Home
+        </Link>
+        <span>/</span>
+        <span>{category.name}</span>
+      </div>
+      <SectionHeading
+        description={
+          category.description ||
+          "Explore the products available in this category and choose the option that fits you best."
+        }
+        eyebrow="Category"
+        title={category.name}
+      />
+
       {products.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
       ) : (
-        <div className="flex h-64 flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/5 text-center">
-          <p className="text-lg font-medium text-gray-400">No products found in this category.</p>
+        <div className="mt-10">
+          <EmptyState
+            description="Add products to this category and they will appear here automatically."
+            eyebrow="No products"
+            icon={<Box className="h-5 w-5" />}
+            title="Nothing is live in this category yet."
+          />
         </div>
       )}
     </div>

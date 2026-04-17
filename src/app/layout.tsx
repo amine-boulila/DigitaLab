@@ -1,29 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
+import { AppShell } from "@/components/AppShell";
+import { getCategories } from "@/lib/db";
+
 import "./globals.css";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "DigitalFun TN | IPTV, Netflix & Spotify Tunisie",
-  description: "Achetez vos abonnements IPTV, Netflix, Spotify et cartes cadeaux en Tunisie. Livraison immédiate, support 24/7 et meilleurs prix chez DigitalFun TN.",
-  keywords: ["iptv Tunisie","IPTV Tunisie", "Netflix Tunisie", "Spotify Tunisie", "Abonnement IPTV", "Gaming Tunisie", "DigitalFun TN"],
+  description:
+    "Achetez vos abonnements IPTV, Netflix, Spotify et cartes cadeaux en Tunisie. Livraison immediate, support 24/7 et meilleurs prix chez DigitalFun TN.",
+  keywords: [
+    "iptv Tunisie",
+    "IPTV Tunisie",
+    "Netflix Tunisie",
+    "Spotify Tunisie",
+    "Abonnement IPTV",
+    "Gaming Tunisie",
+    "DigitalFun TN",
+  ],
   verification: {
     google: "uPGhsckn3tT9mHbLucIbm1gagir8X0H5C92NJLqZqwM",
   },
 };
-
-import { getCategories } from "@/lib/db";
 
 export const revalidate = 60;
 
@@ -35,15 +33,9 @@ export default async function RootLayout({
   const categories = await getCategories();
 
   return (
-    <html lang="en" className="dark">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
-      >
-        <Header categories={categories} />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
+    <html lang="en">
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        <AppShell categories={categories}>{children}</AppShell>
       </body>
     </html>
   );

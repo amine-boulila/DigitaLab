@@ -1,64 +1,113 @@
 "use client";
 
-import { PriceOption } from "@/types";
-import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 
+import { cn } from "@/lib/utils";
+import type { PriceOption } from "@/types";
+
 interface DurationSelectorProps {
+  onSelect: (option: PriceOption) => void;
   options: PriceOption[];
   selectedOption: PriceOption;
-  onSelect: (option: PriceOption) => void;
 }
 
-export function DurationSelector({ options, selectedOption, onSelect }: DurationSelectorProps) {
+export function DurationSelector({
+  onSelect,
+  options,
+  selectedOption,
+}: DurationSelectorProps) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-3 sm:grid-cols-2">
       {options.map((option) => {
-        const isSelected = selectedOption.duration_value === option.duration_value;
-        const discount = option.original_price 
-          ? Math.round(((option.original_price - option.price) / option.original_price) * 100) 
+        const isSelected =
+          selectedOption.duration_value === option.duration_value;
+        const discount = option.original_price
+          ? Math.round(
+              ((option.original_price - option.price) / option.original_price) *
+                100
+            )
           : 0;
 
         return (
           <button
             key={option.duration_value}
-            onClick={() => onSelect(option)}
             className={cn(
-              "relative flex flex-col rounded-xl border p-4 transition-all focus:outline-none",
-              isSelected 
-                ? "border-indigo-500 bg-indigo-500/10 ring-1 ring-indigo-500" 
-                : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20"
+              "relative rounded-[24px] border px-4 py-4 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500/40",
+              isSelected
+                ? "border-slate-950 bg-slate-950 text-white shadow-[0_20px_45px_-28px_rgba(15,23,42,0.7)]"
+                : "border-slate-200 bg-slate-50 text-slate-900 hover:border-slate-300 hover:bg-white"
             )}
+            type="button"
+            onClick={() => onSelect(option)}
           >
-            {option.popular && (
-              <span className="absolute -top-3 left-4 rounded-full bg-indigo-500 px-2 py-0.5 text-[10px] uppercase font-bold text-white shadow-sm">
-                Most Popular
+            {option.popular ? (
+              <span
+                className={cn(
+                  "absolute -top-2.5 left-4 rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]",
+                  isSelected
+                    ? "bg-white text-slate-950"
+                    : "bg-slate-950 text-white"
+                )}
+              >
+                Most popular
               </span>
-            )}
-            
-            <div className="flex w-full items-center justify-between">
-              <span className={cn("text-sm font-medium", isSelected ? "text-indigo-400" : "text-gray-300")}>
-                {option.duration_label}
-              </span>
-              {isSelected && <Check className="h-4 w-4 text-indigo-500" />}
-            </div>
+            ) : null}
 
-            <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-white">
-                {option.price}<span className="text-sm font-normal text-gray-400 ml-1">{option.currency}</span>
-              </span>
-              {option.original_price && (
-                <span className="text-sm text-gray-500 line-through">
-                  {option.original_price}
-                </span>
-              )}
-            </div>
-
-            {discount > 0 && (
-              <div className="mt-2 text-xs text-green-400">
-                Save {discount}%
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p
+                  className={cn(
+                    "text-sm font-medium",
+                    isSelected ? "text-slate-200" : "text-slate-600"
+                  )}
+                >
+                  {option.duration_label}
+                </p>
+                <div className="mt-3 flex items-end gap-2">
+                  <p className="text-3xl font-semibold tracking-tight">
+                    {option.price}
+                  </p>
+                  <span
+                    className={cn(
+                      "pb-1 text-sm",
+                      isSelected ? "text-slate-300" : "text-slate-500"
+                    )}
+                  >
+                    {option.currency}
+                  </span>
+                </div>
+                {option.original_price ? (
+                  <p
+                    className={cn(
+                      "mt-2 text-sm line-through",
+                      isSelected ? "text-slate-400" : "text-slate-400"
+                    )}
+                  >
+                    {option.original_price} {option.currency}
+                  </p>
+                ) : null}
               </div>
-            )}
+
+              <div
+                className={cn(
+                  "mt-1 flex h-8 w-8 items-center justify-center rounded-full",
+                  isSelected ? "bg-white text-slate-950" : "bg-white text-slate-500"
+                )}
+              >
+                <Check className="h-4 w-4" />
+              </div>
+            </div>
+
+            {discount > 0 ? (
+              <p
+                className={cn(
+                  "mt-4 text-xs font-semibold uppercase tracking-[0.18em]",
+                  isSelected ? "text-emerald-300" : "text-emerald-600"
+                )}
+              >
+                Save {discount}%
+              </p>
+            ) : null}
           </button>
         );
       })}

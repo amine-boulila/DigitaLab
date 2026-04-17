@@ -1,9 +1,10 @@
 import { getProductBySlug, getProducts } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { ProductPricing } from "@/components/ProductPricing";
-import { CheckCircle2, ArrowLeft } from "lucide-react";
+import { CheckCircle2, ArrowLeft, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Metadata } from "next";
+import { Surface } from "@/components/ui/surface";
 
 interface ProductPageProps {
   params: Promise<{
@@ -45,53 +46,59 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (
-    <div className="container mx-auto min-h-screen px-4 py-8 lg:py-12">
-      <Link href="/" className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-white">
+    <div className="page-section min-h-screen">
+      <Link
+        href="/"
+        className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-950"
+      >
         <ArrowLeft className="h-4 w-4" />
         Back to Home
       </Link>
 
-      <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-        {/* Left Column: Product Info */}
+      <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
         <div>
           {product.badge && (
-            <span className="mb-4 inline-block rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 px-3 py-1 text-xs font-bold text-white">
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white">
+              <Sparkles className="h-3.5 w-3.5" />
               {product.badge}
             </span>
           )}
-          
-          {product.image_url && (
-            <div className="mb-8 w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8">
-               <img 
-                 src={product.image_url} 
-                 alt={product.name} 
-                 className="mx-auto max-h-[400px] object-contain"
-               />
-            </div>
-          )}
 
-          <h1 className="mb-6 text-4xl font-bold leading-tight text-white md:text-5xl">
+          <Surface className="mb-8 overflow-hidden p-8">
+            {product.image_url ? (
+              <img
+                src={product.image_url}
+                alt={product.name}
+                className="mx-auto max-h-[420px] object-contain"
+              />
+            ) : (
+              <div className="flex min-h-72 items-center justify-center rounded-[24px] bg-slate-50">
+                <Sparkles className="h-10 w-10 text-slate-400" />
+              </div>
+            )}
+          </Surface>
+
+          <h1 className="text-balance mb-5 font-display text-5xl leading-none text-slate-950 md:text-6xl">
             {product.name}
           </h1>
-          <p className="mb-8 text-lg leading-relaxed text-gray-300">
+          <p className="mb-8 max-w-2xl text-lg leading-8 text-slate-600">
             {product.full_description}
           </p>
 
-          <div className="mb-8">
-            <h3 className="mb-4 text-lg font-bold text-white">Key Features</h3>
+          <Surface tone="muted" className="p-6 md:p-8">
+            <h3 className="text-xl font-semibold text-slate-950">Key features</h3>
             <ul className="space-y-3">
               {product.features.map((feature, index) => (
-                <li key={index} className="flex items-start gap-3 text-gray-300">
-                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-indigo-400" />
+                <li key={index} className="flex items-start gap-3 text-slate-600">
+                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-teal-600" />
                   <span>{feature}</span>
                 </li>
               ))}
             </ul>
-          </div>
+          </Surface>
         </div>
 
-        {/* Right Column: Pricing & CTA */}
-        <div className="lg:sticky lg:top-24 h-fit">
+        <div className="h-fit lg:sticky lg:top-28">
           <ProductPricing product={product} />
         </div>
       </div>

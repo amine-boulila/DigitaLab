@@ -1,79 +1,148 @@
 "use client";
 
-import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
-import { Category } from '@/types';
-import Image from 'next/image';
+import Image from "next/image";
+import Link from "next/link";
+import { Menu, MessageCircle, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+
+import { buttonStyles } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import type { Category } from "@/types";
 
 interface HeaderProps {
   categories: Category[];
 }
 
+const staticLinks = [
+  { href: "/faq", label: "FAQ" },
+  { href: "/how-it-works", label: "How It Works" },
+  { href: "/contact", label: "Contact" },
+];
+
 export function Header({ categories = [] }: HeaderProps) {
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const categoryLinks = categories.slice(0, 4).map((category) => ({
+    href: `/categories/${category.slug}`,
+    label: category.name,
+  }));
+
+  const navLinks = [{ href: "/", label: "Home" }, ...categoryLinks, ...staticLinks];
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-cyan-500/20 bg-black/30 backdrop-blur-xl">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="group flex items-center gap-2 text-xl font-bold tracking-tighter text-white transition-all hover:scale-105">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg overflow-hidden ring-2 ring-cyan-500/50 transition-all group-hover:ring-cyan-400">
-            <Image src="/logo.png" alt="DigitalFun Logo" width={40} height={40} className="object-contain" />
+    <header className="sticky top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 rounded-full border border-white/70 bg-white/80 px-4 py-3 shadow-[0_20px_50px_-35px_rgba(15,23,42,0.45)] backdrop-blur-xl sm:px-6">
+        <Link
+          className="flex items-center gap-3 rounded-full pr-2 transition hover:opacity-90"
+          href="/"
+        >
+          <div className="soft-ring flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-slate-950">
+            <Image
+              alt="DigitalFun logo"
+              className="h-full w-full object-contain"
+              height={44}
+              src="/logo.png"
+              width={44}
+            />
           </div>
-          <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">DigitalFun</span>
+          <div className="min-w-0">
+            <p className="font-display text-xl leading-none text-slate-950">
+              DigitalFun
+            </p>
+            <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
+              Instant digital access
+            </p>
+          </div>
         </Link>
-        
-        <nav className="hidden md:flex items-center gap-6">
-          <Link href="/" className="text-sm font-medium text-gray-300 transition-colors hover:text-cyan-400">
-            Home
-          </Link>
-          {categories.slice(0, 5).map((category) => (
-             <Link 
-               key={category.id}
-               href={`/categories/${category.slug}`} 
-               className="text-sm font-medium text-gray-300 transition-colors hover:text-cyan-400"
-             >
-               {category.name}
-             </Link>
-          ))}
+
+        <nav className="hidden items-center gap-1 xl:flex">
+          {navLinks.map((link) => {
+            const isActive =
+              link.href === "/"
+                ? pathname === "/"
+                : pathname === link.href || pathname.startsWith(`${link.href}/`);
+
+            return (
+              <Link
+                key={link.href}
+                className={cn(
+                  "rounded-full px-4 py-2 text-sm font-medium transition",
+                  isActive
+                    ? "bg-slate-950 text-white"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+                )}
+                href={link.href}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="flex items-center gap-4">
-           {/* Mobile Menu Trigger */}
-           <button 
-             onClick={() => setIsMenuOpen(!isMenuOpen)}
-             className="md:hidden text-gray-300 hover:text-cyan-400 transition-colors"
-           >
-             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-           </button>
+        <div className="flex items-center gap-2">
+          <Link
+            className={buttonStyles({
+              className: "hidden sm:inline-flex",
+              variant: "secondary",
+            })}
+            href="/contact"
+          >
+            <MessageCircle className="h-4 w-4" />
+            Support
+          </Link>
+          <button
+            aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            className={buttonStyles({
+              className: "xl:hidden",
+              size: "icon",
+              variant: "outline",
+            })}
+            type="button"
+            onClick={() => setIsMenuOpen((current) => !current)}
+          >
+            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Menu Content */}
-      {isMenuOpen && (
-        <div className="absolute top-16 left-0 w-full border-b border-cyan-500/20 bg-black/95 backdrop-blur-xl md:hidden">
-          <nav className="flex flex-col p-4 space-y-4">
-             <Link 
-               href="/" 
-               className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors"
-               onClick={() => setIsMenuOpen(false)}
-             >
-               Home
-             </Link>
-             {categories.map((category) => (
-                <Link 
-                  key={category.id}
-                  href={`/categories/${category.slug}`} 
-                  className="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors"
+      {isMenuOpen ? (
+        <div className="mx-auto mt-3 w-full max-w-7xl rounded-[28px] border border-white/70 bg-white/90 p-4 shadow-[0_24px_60px_-34px_rgba(15,23,42,0.35)] backdrop-blur-xl xl:hidden">
+          <nav className="grid gap-2">
+            {navLinks.map((link) => {
+              const isActive =
+                link.href === "/"
+                  ? pathname === "/"
+                  : pathname === link.href || pathname.startsWith(`${link.href}/`);
+
+              return (
+                <Link
+                  key={link.href}
+                  className={cn(
+                    "rounded-2xl px-4 py-3 text-sm font-medium transition",
+                    isActive
+                      ? "bg-slate-950 text-white"
+                      : "bg-slate-50 text-slate-700 hover:bg-slate-100"
+                  )}
+                  href={link.href}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {category.name}
+                  {link.label}
                 </Link>
-             ))}
+              );
+            })}
+            <Link
+              className={buttonStyles({ className: "mt-2 w-full", variant: "secondary" })}
+              href="/contact"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <MessageCircle className="h-4 w-4" />
+              Contact support
+            </Link>
           </nav>
         </div>
-      )}
+      ) : null}
     </header>
   );
 }

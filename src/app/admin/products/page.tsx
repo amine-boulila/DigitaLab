@@ -1,129 +1,157 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { Plus, Edit, Trash2, Search } from "lucide-react";
-import { Product } from "@/types";
+import { Edit, Package, Plus, Search, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { AdminTableCard } from "@/components/admin/AdminTableCard";
+import { EmptyState } from "@/components/ui/empty-state";
+import { buttonStyles } from "@/components/ui/button";
+import { TextInput } from "@/components/ui/form-fields";
+import { Surface } from "@/components/ui/surface";
+import { supabase } from "@/lib/supabase";
+import type { Product } from "@/types";
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  async function fetchProducts() {
-    setLoading(true);
-    const { data } = await supabase.from('products').select('*');
+  const fetchProducts = async () => {
+    const { data } = await supabase.from("products").select("*");
     if (data) {
-        // Map DB result to Product type
-        const mappedProducts = data.map((p: any) => ({
-            ...p,
-            category: p.category_slug,
-        }));
-        setProducts(mappedProducts);
+      const mappedProducts = (
+        data as Array<Omit<Product, "category"> & { category_slug: string }>
+      ).map((product) => ({
+        ...product,
+        category: product.category_slug,
+      }));
+      setProducts(mappedProducts);
     }
     setLoading(false);
-  }
+  };
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      await fetchProducts();
+    };
+
+    void loadProducts();
+  }, []);
 
   async function handleDelete(id: string) {
     if (!confirm("Are you sure you want to delete this product?")) return;
-    
-    const { error } = await supabase.from('products').delete().eq('id', id);
+
+    const { error } = await supabase.from("products").delete().eq("id", id);
     if (!error) {
-      setProducts(products.filter(p => p.id !== id));
+      setProducts(products.filter((product) => product.id !== id));
     } else {
-        alert("Error deleting product");
+      alert("Error deleting product");
     }
   }
 
-  const filteredProducts = products.filter(p => 
-    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div>
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white">Products</h1>
-        <Link 
-          href="/admin/products/new"
-          className="flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-500"
-        >
-          <Plus className="h-5 w-5" />
-          Add Product
-        </Link>
-      </div>
+    <div className="space-y-8">
+      <AdminPageHeader
+        action={
+          <Link
+            className={buttonStyles({ variant: "secondary" })}
+            href="/admin/products/new"
+          >
+            <Plus className="h-4 w-4" />
+            Add product
+          </Link>
+        }
+        description="Manage the product catalog with improved search, stronger table hierarchy, and calmer editing affordances."
+        eyebrow="Catalog"
+        title="Products"
+      />
 
-      <div className="mb-6 relative">
-          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
-          <input 
-            type="text"
+      <Surface className="p-4">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <TextInput
+            className="pl-11"
             placeholder="Search products..."
-            className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-white placeholder-gray-500 outline-none focus:border-indigo-500"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(event) => setSearchTerm(event.target.value)}
           />
-      </div>
+        </div>
+      </Surface>
 
       {loading ? (
-        <div className="text-center text-gray-400">Loading products...</div>
+        <Surface className="p-6 text-sm text-slate-500">Loading products...</Surface>
+      ) : filteredProducts.length === 0 ? (
+        <EmptyState
+          description="Products will show up here once they are created. Search is also applied to this view."
+          eyebrow="No matching products"
+          icon={<Package className="h-5 w-5" />}
+          title="Nothing to show right now."
+        />
       ) : (
-        <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
-          <table className="w-full text-left">
-            <thead className="bg-white/5">
+        <AdminTableCard
+          description="A cleaner overview of pricing complexity, category placement, and edit actions."
+          title="Product list"
+        >
+          <table className="min-w-full text-left">
+            <thead className="bg-slate-50">
               <tr>
-                <th className="px-6 py-4 text-sm font-semibold text-gray-300">Name</th>
-                <th className="px-6 py-4 text-sm font-semibold text-gray-300">Category</th>
-                <th className="px-6 py-4 text-sm font-semibold text-gray-300">Prices</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-300">Actions</th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Product
+                </th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Category
+                </th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Pricing
+                </th>
+                <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-200">
               {filteredProducts.map((product) => (
-                <tr key={product.id} className="hover:bg-white/5">
-                  <td className="px-6 py-4">
-                    <div className="font-medium text-white">{product.name}</div>
-                    <div className="text-xs text-gray-500">{product.slug}</div>
+                <tr key={product.id} className="bg-white/70">
+                  <td className="px-6 py-5">
+                    <div className="font-medium text-slate-950">{product.name}</div>
+                    <div className="mt-1 text-sm text-slate-500">{product.slug}</div>
                   </td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex rounded-full bg-indigo-500/10 px-2 py-1 text-xs font-medium text-indigo-400">
+                  <td className="px-6 py-5">
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
                       {product.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-400">
+                  <td className="px-6 py-5 text-sm text-slate-500">
                     {product.prices.length} options
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-5">
                     <div className="flex items-center justify-end gap-2">
-                      <Link 
+                      <Link
+                        className={buttonStyles({ size: "icon", variant: "outline" })}
                         href={`/admin/products/edit/${product.id}`}
-                        className="rounded-lg p-2 text-gray-400 hover:bg-white/10 hover:text-white"
                       >
                         <Edit className="h-4 w-4" />
                       </Link>
-                      <button 
+                      <button
+                        className={buttonStyles({ size: "icon", variant: "ghost" })}
+                        type="button"
                         onClick={() => handleDelete(product.id)}
-                        className="rounded-lg p-2 text-gray-400 hover:bg-red-500/10 hover:text-red-400"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4 text-rose-500" />
                       </button>
                     </div>
                   </td>
                 </tr>
               ))}
-              {filteredProducts.length === 0 && (
-                  <tr>
-                      <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
-                          No products found.
-                      </td>
-                  </tr>
-              )}
             </tbody>
           </table>
-        </div>
+        </AdminTableCard>
       )}
     </div>
   );

@@ -1,19 +1,25 @@
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+import { Surface } from "@/components/ui/surface";
 
 interface FeatureCardProps {
+  description: string;
   icon: LucideIcon;
   title: string;
-  description: string;
 }
 
-export function FeatureCard({ icon: Icon, title, description }: FeatureCardProps) {
+export function FeatureCard({
+  description,
+  icon: Icon,
+  title,
+}: FeatureCardProps) {
   return (
-    <div className="glass group rounded-2xl p-6 transition-all hover:scale-105 hover:shadow-lg hover:shadow-cyan-500/20">
-      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 text-cyan-400 transition-all group-hover:from-cyan-500/30 group-hover:to-purple-500/30 group-hover:text-cyan-300">
-        <Icon className="h-6 w-6" />
+    <Surface tone="muted" className="h-full p-6">
+      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-slate-900 shadow-sm">
+        <Icon className="h-5 w-5" />
       </div>
-      <h3 className="mb-2 text-lg font-bold text-white">{title}</h3>
-      <p className="text-sm text-gray-400">{description}</p>
-    </div>
+      <h3 className="mt-5 text-xl font-semibold text-slate-950">{title}</h3>
+      <p className="mt-3 text-sm leading-6 text-slate-600">{description}</p>
+    </Surface>
   );
 }

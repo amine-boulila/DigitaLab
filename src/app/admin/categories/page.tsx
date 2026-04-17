@@ -1,124 +1,156 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import Link from "next/link";
-import { Plus, Edit, Trash2, Search } from "lucide-react";
-import { Category } from "@/types"; // Using your shared types
+import { Edit, Plus, Search, Tag, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { AdminPageHeader } from "@/components/admin/AdminPageHeader";
+import { AdminTableCard } from "@/components/admin/AdminTableCard";
+import { EmptyState } from "@/components/ui/empty-state";
+import { buttonStyles } from "@/components/ui/button";
+import { TextInput } from "@/components/ui/form-fields";
+import { Surface } from "@/components/ui/surface";
+import { supabase } from "@/lib/supabase";
+import type { Category } from "@/types";
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  async function fetchCategories() {
-    setLoading(true);
-    const { data, error } = await supabase.from('categories').select('*');
+  const fetchCategories = async () => {
+    const { data } = await supabase.from("categories").select("*");
     if (data) {
-        setCategories(data);
+      setCategories(data);
     }
     setLoading(false);
-  }
+  };
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      await fetchCategories();
+    };
+
+    void loadCategories();
+  }, []);
 
   async function handleDelete(id: string) {
-    if (!confirm("Are you sure you want to delete this category? Products in this category might be affected.")) return;
-    
-    const { error } = await supabase.from('categories').delete().eq('id', id);
+    if (
+      !confirm(
+        "Are you sure you want to delete this category? Products in this category might be affected."
+      )
+    ) {
+      return;
+    }
+
+    const { error } = await supabase.from("categories").delete().eq("id", id);
     if (!error) {
-      setCategories(categories.filter(c => c.id !== id));
+      setCategories(categories.filter((category) => category.id !== id));
     } else {
-        alert("Error deleting category");
+      alert("Error deleting category");
     }
   }
 
-  const filteredCategories = categories.filter(c => 
-    c.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredCategories = categories.filter((category) =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div>
-      <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-white">Categories</h1>
-        <Link 
-          href="/admin/categories/new"
-          className="flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 font-bold text-white transition-colors hover:bg-indigo-500"
-        >
-          <Plus className="h-5 w-5" />
-          Add Category
-        </Link>
-      </div>
+    <div className="space-y-8">
+      <AdminPageHeader
+        action={
+          <Link
+            className={buttonStyles({ variant: "secondary" })}
+            href="/admin/categories/new"
+          >
+            <Plus className="h-4 w-4" />
+            Add category
+          </Link>
+        }
+        description="Keep navigation and grouping tidy with a more readable category management table."
+        eyebrow="Structure"
+        title="Categories"
+      />
 
-      <div className="mb-6 relative">
-          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
-          <input 
-            type="text"
+      <Surface className="p-4">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <TextInput
+            className="pl-11"
             placeholder="Search categories..."
-            className="w-full rounded-xl border border-white/10 bg-white/5 py-3 pl-10 pr-4 text-white placeholder-gray-500 outline-none focus:border-indigo-500"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(event) => setSearchTerm(event.target.value)}
           />
-      </div>
+        </div>
+      </Surface>
 
       {loading ? (
-        <div className="text-center text-gray-400">Loading categories...</div>
+        <Surface className="p-6 text-sm text-slate-500">Loading categories...</Surface>
+      ) : filteredCategories.length === 0 ? (
+        <EmptyState
+          description="Create categories to shape storefront navigation and organize your products."
+          eyebrow="No matching categories"
+          icon={<Tag className="h-5 w-5" />}
+          title="Nothing to show right now."
+        />
       ) : (
-        <div className="rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
-          <table className="w-full text-left">
-            <thead className="bg-white/5">
+        <AdminTableCard
+          description="Cleaner labels and spacing make it easier to scan names, slugs, and descriptions."
+          title="Category list"
+        >
+          <table className="min-w-full text-left">
+            <thead className="bg-slate-50">
               <tr>
-                <th className="px-6 py-4 text-sm font-semibold text-gray-300">Name</th>
-                <th className="px-6 py-4 text-sm font-semibold text-gray-300">Slug</th>
-                <th className="px-6 py-4 text-sm font-semibold text-gray-300">Description</th>
-                <th className="px-6 py-4 text-right text-sm font-semibold text-gray-300">Actions</th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Name
+                </th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Slug
+                </th>
+                <th className="px-6 py-4 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Description
+                </th>
+                <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-200">
               {filteredCategories.map((category) => (
-                <tr key={category.id} className="hover:bg-white/5">
-                  <td className="px-6 py-4">
-                    <div className="font-medium text-white">{category.name}</div>
+                <tr key={category.id} className="bg-white/70">
+                  <td className="px-6 py-5 font-medium text-slate-950">
+                    {category.name}
                   </td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex rounded-full bg-indigo-500/10 px-2 py-1 text-xs font-medium text-indigo-400">
+                  <td className="px-6 py-5">
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">
                       {category.slug}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-400 max-w-xs truncate">
+                  <td className="max-w-sm px-6 py-5 text-sm text-slate-500">
                     {category.description}
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-5">
                     <div className="flex items-center justify-end gap-2">
-                       {/* Edit functionality not implemented yet, just visual */}
-                      <Link 
-                        href={`/admin/categories/edit/${category.id}`} 
-                        className="rounded-lg p-2 text-gray-400 hover:bg-white/10 hover:text-white"
+                      <Link
+                        className={buttonStyles({ size: "icon", variant: "outline" })}
+                        href={`/admin/categories/edit/${category.id}`}
                       >
                         <Edit className="h-4 w-4" />
                       </Link>
-                      <button 
+                      <button
+                        className={buttonStyles({ size: "icon", variant: "ghost" })}
+                        type="button"
                         onClick={() => handleDelete(category.id)}
-                        className="rounded-lg p-2 text-gray-400 hover:bg-red-500/10 hover:text-red-400"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4 text-rose-500" />
                       </button>
                     </div>
                   </td>
                 </tr>
               ))}
-              {filteredCategories.length === 0 && (
-                  <tr>
-                      <td colSpan={4} className="px-6 py-8 text-center text-gray-500">
-                          No categories found.
-                      </td>
-                  </tr>
-              )}
             </tbody>
           </table>
-        </div>
+        </AdminTableCard>
       )}
     </div>
   );

@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { Surface } from "@/components/ui/surface";
 
 export const metadata: Metadata = {
   title: "FAQ | DigitalFun",
@@ -26,15 +28,25 @@ export default function FAQPage() {
   ];
 
   return (
-    <div className="container mx-auto min-h-screen px-4 py-12">
-      <h1 className="mb-12 text-center text-4xl font-bold text-white">Frequently Asked Questions</h1>
-      
-      <div className="mx-auto max-w-3xl space-y-6">
+    <div className="page-section min-h-screen">
+      <SectionHeading
+        align="center"
+        description="Find quick answers about ordering, delivery, payment, and support."
+        eyebrow="FAQ"
+        title="Frequently asked questions."
+      />
+
+      <div className="mx-auto mt-10 max-w-4xl space-y-4">
         {faqs.map((faq, index) => (
-          <div key={index} className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-            <h3 className="mb-3 text-xl font-bold text-white">{faq.question}</h3>
-            <p className="text-gray-400">{faq.answer}</p>
-          </div>
+          <Surface key={index} className="p-6 md:p-7">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-700">
+              Question {index + 1}
+            </p>
+            <h3 className="mt-3 text-2xl font-semibold text-slate-950">
+              {faq.question}
+            </h3>
+            <p className="mt-4 text-sm leading-7 text-slate-600">{faq.answer}</p>
+          </Surface>
         ))}
       </div>
     </div>

@@ -20,12 +20,12 @@ export async function getProducts(): Promise<Product[]> {
   try {
     const { data, error } = await supabase.from('products').select('*');
     if (error || !data || data.length === 0) throw error;
-    
-    // Map DB result to Product type if needed (e.g. if field names differ)
-    // Here we assume 1:1 mapping mostly, but we might need to handle 'category' vs 'category_slug'
-    return data.map((p: any) => ({
-      ...p,
-      category: p.category_slug, // map foreign key to our type's expected field
+
+    return (
+      data as Array<Omit<Product, "category"> & { category_slug: string }>
+    ).map((product) => ({
+      ...product,
+      category: product.category_slug,
     }));
   } catch (e) {
     console.warn("Fetching products from DB failed, using static data:", e);
