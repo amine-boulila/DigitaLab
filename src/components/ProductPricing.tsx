@@ -15,7 +15,7 @@ interface ProductPricingProps {
 
 export function ProductPricing({ product }: ProductPricingProps) {
   const [selectedOption, setSelectedOption] = useState<PriceOption>(
-    product.prices.find((price) => price.popular) ?? product.prices[0]
+    product.prices.find((price) => price.popular) ?? product.prices[0],
   );
 
   const handleOrder = () => {
@@ -72,7 +72,7 @@ export function ProductPricing({ product }: ProductPricingProps) {
                 {Math.round(
                   ((selectedOption.original_price - selectedOption.price) /
                     selectedOption.original_price) *
-                    100
+                    100,
                 )}
                 %
               </p>
@@ -82,7 +82,7 @@ export function ProductPricing({ product }: ProductPricingProps) {
 
         <button
           className={buttonStyles({
-            className: "mt-6 w-full justify-center",
+            className: "mt-6 w-full cursor-pointer justify-center",
             size: "lg",
             variant: "success",
           })}

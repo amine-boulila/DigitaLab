@@ -46,23 +46,30 @@ export function Footer({ categories = [] }: FooterProps) {
               Follow
             </h3>
             <div className="mt-5 flex gap-3">
-              <SocialLink icon={Facebook} />
-              <SocialLink icon={Twitter} />
-              <SocialLink icon={Instagram} />
+              <SocialLink href="#" icon={Facebook} />
+              <SocialLink href="#" icon={Twitter} />
+              <SocialLink
+                href="https://www.instagram.com/digitalfun.tn/"
+                icon={Instagram}
+              />
             </div>
             <div className="mt-8 rounded-[28px] border border-slate-200 bg-slate-50 p-5">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
                 Service Promise
               </p>
               <p className="mt-3 text-sm leading-6 text-slate-600">
-                Fast replies on WhatsApp, clear prices, and quick support from order to delivery.
+                Fast replies on WhatsApp, clear prices, and quick support from
+                order to delivery.
               </p>
             </div>
           </div>
         </div>
 
         <div className="mt-12 flex flex-col gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
-          <p>Copyright {new Date().getFullYear()} DigitalFun. All rights reserved.</p>
+          <p>
+            Copyright {new Date().getFullYear()} DigitalFun. All rights
+            reserved.
+          </p>
           <p>Built for trust, speed, and a more premium customer experience.</p>
         </div>
       </div>
@@ -99,11 +106,19 @@ function FooterColumn({
   );
 }
 
-function SocialLink({ icon: Icon }: { icon: typeof Facebook }) {
+function SocialLink({
+  href,
+  icon: Icon,
+}: {
+  href: string;
+  icon: typeof Facebook;
+}) {
   return (
     <Link
       className="flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950"
-      href="#"
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noreferrer" : undefined}
     >
       <Icon className="h-4 w-4" />
     </Link>

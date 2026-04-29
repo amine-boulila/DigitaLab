@@ -3,8 +3,10 @@ import { notFound } from "next/navigation";
 import { ProductPricing } from "@/components/ProductPricing";
 import { CheckCircle2, ArrowLeft, Sparkles } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Metadata } from "next";
 import { Surface } from "@/components/ui/surface";
+import { ProductDescription } from "@/components/ProductDescription";
 
 interface ProductPageProps {
   params: Promise<{
@@ -21,16 +23,18 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  
+
   if (!product) {
     return {
       title: "Product Not Found",
     };
   }
-  
+
   return {
     title: `${product.name} | DigitalFun`,
     description: product.short_description,
@@ -66,13 +70,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
           <Surface className="mb-8 overflow-hidden p-8">
             {product.image_url ? (
-              <img
-                src={product.image_url}
+              <Image
                 alt={product.name}
-                className="mx-auto max-h-[420px] object-contain"
+                className="mx-auto max-h-105 object-contain"
+                height={420}
+                src={product.image_url}
+                width={840}
               />
             ) : (
-              <div className="flex min-h-72 items-center justify-center rounded-[24px] bg-slate-50">
+              <div className="flex min-h-72 items-center justify-center rounded-3xl bg-slate-50">
                 <Sparkles className="h-10 w-10 text-slate-400" />
               </div>
             )}
@@ -81,21 +87,26 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <h1 className="text-balance mb-5 font-display text-5xl leading-none text-slate-950 md:text-6xl">
             {product.name}
           </h1>
-          <p className="mb-8 max-w-2xl text-lg leading-8 text-slate-600">
-            {product.full_description}
-          </p>
+          <ProductDescription description={product.full_description} />
 
-          <Surface tone="muted" className="p-6 md:p-8">
-            <h3 className="text-xl font-semibold text-slate-950">Key features</h3>
-            <ul className="space-y-3">
-              {product.features.map((feature, index) => (
-                <li key={index} className="flex items-start gap-3 text-slate-600">
-                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-teal-600" />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </Surface>
+          {product.features.length > 0 ? (
+            <Surface tone="muted" className="p-6 md:p-8">
+              <h3 className="text-xl font-semibold text-slate-950">
+                Key features
+              </h3>
+              <ul className="space-y-3">
+                {product.features.map((feature, index) => (
+                  <li
+                    key={index}
+                    className="flex items-start gap-3 text-slate-600"
+                  >
+                    <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-teal-600" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </Surface>
+          ) : null}
         </div>
 
         <div className="h-fit lg:sticky lg:top-28">
