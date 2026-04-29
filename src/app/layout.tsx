@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { AppShell } from "@/components/AppShell";
+import { MicrosoftClarity } from "@/components/MicrosoftClarity";
 import { getCategories } from "@/lib/db";
 
 import "./globals.css";
@@ -36,6 +37,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <AppShell categories={categories}>{children}</AppShell>
+        <MicrosoftClarity />
       </body>
     </html>
   );
