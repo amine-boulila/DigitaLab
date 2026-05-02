@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/components/BrandLogo";
 import Link from "next/link";
 import { ArrowUpRight, Facebook, Instagram, Twitter } from "lucide-react";
 
@@ -13,9 +14,7 @@ export function Footer({ categories = [] }: FooterProps) {
       <div className="shell-container py-14">
         <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div className="max-w-md">
-            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-teal-700">
-              Forjaw
-            </p>
+            <BrandLogo href="/" />
             <h2 className="mt-4 font-display text-4xl text-slate-950">
               Clean delivery, quick support, zero friction.
             </h2>

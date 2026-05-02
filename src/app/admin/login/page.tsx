@@ -1,9 +1,9 @@
 "use client";
 
-import { Lock } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { BrandLogo } from "@/components/BrandLogo";
 import { buttonStyles } from "@/components/ui/button";
 import {
   FieldGroup,
@@ -61,16 +61,12 @@ export default function AdminLoginPage() {
         </Surface>
 
         <Surface className="p-8 md:p-10">
-          <div className="mb-8 flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-white">
-              <Lock className="h-6 w-6" />
-            </div>
-            <div>
-              <h2 className="text-3xl font-semibold text-slate-950">Admin login</h2>
-              <p className="mt-1 text-sm text-slate-500">
-                Enter your credentials to continue.
-              </p>
-            </div>
+          <BrandLogo className="mb-8" href="/" size="lg" />
+          <div className="mb-8">
+            <h2 className="text-3xl font-semibold text-slate-950">Admin login</h2>
+            <p className="mt-1 text-sm text-slate-500">
+              Enter your credentials to continue.
+            </p>
           </div>
 
           {error ? (

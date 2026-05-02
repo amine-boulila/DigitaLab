@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Menu, MessageCircle, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
+import { BrandLogo } from "@/components/BrandLogo";
 import { buttonStyles } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Category } from "@/types";
@@ -34,28 +34,7 @@ export function Header({ categories = [] }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 rounded-full border border-white/70 bg-white/80 px-4 py-3 shadow-[0_20px_50px_-35px_rgba(15,23,42,0.45)] backdrop-blur-xl sm:px-6">
-        <Link
-          className="flex items-center gap-3 rounded-full pr-2 transition hover:opacity-90"
-          href="/"
-        >
-          <div className="soft-ring flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-slate-950">
-            <Image
-              alt="Forjaw logo"
-              className="h-full w-full object-contain"
-              height={44}
-              src="/logo.png"
-              width={44}
-            />
-          </div>
-          <div className="min-w-0">
-            <p className="font-display text-xl leading-none text-slate-950">
-              Forjaw
-            </p>
-            <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
-              Instant digital access
-            </p>
-          </div>
-        </Link>
+        <BrandLogo className="pr-2" href="/" />
 
         <nav className="hidden items-center gap-1 xl:flex">
           {navLinks.map((link) => {

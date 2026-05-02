@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { BrandLogo } from "@/components/BrandLogo";
 import { buttonStyles } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
@@ -75,10 +76,16 @@ export default function AdminLayout({
       <div className="mx-auto flex min-h-screen max-w-[1600px]">
         <aside className="hidden w-72 shrink-0 flex-col border-r border-slate-200 bg-slate-950 px-6 py-6 text-white lg:flex">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-slate-400">
+            <BrandLogo
+              href="/"
+              rel="noreferrer"
+              size="lg"
+              target="_blank"
+              theme="dark"
+            />
+            <p className="mt-6 text-xs font-semibold uppercase tracking-[0.26em] text-slate-400">
               Admin
             </p>
-            <h1 className="mt-3 font-display text-4xl text-white">Forjaw</h1>
             <p className="mt-3 text-sm leading-6 text-slate-400">
               Manage products, categories, and the storefront structure with a cleaner dashboard shell.
             </p>
