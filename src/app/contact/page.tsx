@@ -8,7 +8,7 @@ import { ProductDescription } from "@/components/ProductDescription";
 import { ContactButton } from "./ContactButtons";
 
 export const metadata: Metadata = {
-  title: "Contact Us | DigitalFun",
+  title: "Contact Us | Forjaw",
   description: "Get in touch with us related to sales or support.",
 };
 
@@ -25,7 +25,7 @@ export default function ContactPage() {
       <div className="mx-auto mt-10 grid max-w-4xl gap-6 md:grid-cols-2">
         <ContactButton />
 
-        <a href="mailto:support@digitalstore.com" className="block h-full">
+        <a href="mailto:support@forjaw.com" className="block h-full">
           <Surface className="flex h-full cursor-pointer flex-col items-start justify-between p-8 transition hover:-translate-y-1">
             <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-white">
               <Mail className="h-7 w-7" />

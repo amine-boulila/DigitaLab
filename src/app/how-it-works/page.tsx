@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
 
 export const metadata: Metadata = {
-  title: "How It Works | DigitalFun",
+  title: "How It Works | Forjaw",
   description: "Learn how to purchase and use our digital products.",
 };
 

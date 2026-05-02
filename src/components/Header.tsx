@@ -40,7 +40,7 @@ export function Header({ categories = [] }: HeaderProps) {
         >
           <div className="soft-ring flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-slate-950">
             <Image
-              alt="DigitalFun logo"
+              alt="Forjaw logo"
               className="h-full w-full object-contain"
               height={44}
               src="/logo.png"
@@ -49,7 +49,7 @@ export function Header({ categories = [] }: HeaderProps) {
           </div>
           <div className="min-w-0">
             <p className="font-display text-xl leading-none text-slate-950">
-              DigitalFun
+              Forjaw
             </p>
             <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
               Instant digital access

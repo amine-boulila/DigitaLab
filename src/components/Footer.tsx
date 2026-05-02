@@ -14,7 +14,7 @@ export function Footer({ categories = [] }: FooterProps) {
         <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div className="max-w-md">
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-teal-700">
-              DigitalFun TN
+              Forjaw
             </p>
             <h2 className="mt-4 font-display text-4xl text-slate-950">
               Clean delivery, quick support, zero friction.
@@ -49,7 +49,7 @@ export function Footer({ categories = [] }: FooterProps) {
               <SocialLink href="#" icon={Facebook} />
               <SocialLink href="#" icon={Twitter} />
               <SocialLink
-                href="https://www.instagram.com/digitalfun.tn/"
+                href="https://www.instagram.com/forjaw/"
                 icon={Instagram}
               />
             </div>
@@ -67,7 +67,7 @@ export function Footer({ categories = [] }: FooterProps) {
 
         <div className="mt-12 flex flex-col gap-3 border-t border-slate-200 pt-6 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
           <p>
-            Copyright {new Date().getFullYear()} DigitalFun. All rights
+            Copyright {new Date().getFullYear()} Forjaw. All rights
             reserved.
           </p>
           <p>Built for trust, speed, and a more premium customer experience.</p>

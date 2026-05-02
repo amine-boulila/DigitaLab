@@ -3,7 +3,7 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { Surface } from "@/components/ui/surface";
 
 export const metadata: Metadata = {
-  title: "FAQ | DigitalFun",
+  title: "FAQ | Forjaw",
   description: "Frequently asked questions about our services.",
 };
 

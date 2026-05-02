@@ -36,7 +36,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${product.name} | DigitalFun`,
+    title: `${product.name} | Forjaw`,
     description: product.short_description,
   };
 }

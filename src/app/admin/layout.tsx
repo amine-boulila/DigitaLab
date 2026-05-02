@@ -78,7 +78,7 @@ export default function AdminLayout({
             <p className="text-xs font-semibold uppercase tracking-[0.26em] text-slate-400">
               Admin
             </p>
-            <h1 className="mt-3 font-display text-4xl text-white">DigitalFun</h1>
+            <h1 className="mt-3 font-display text-4xl text-white">Forjaw</h1>
             <p className="mt-3 text-sm leading-6 text-slate-400">
               Manage products, categories, and the storefront structure with a cleaner dashboard shell.
             </p>
